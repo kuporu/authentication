@@ -1,8 +1,8 @@
 package org.hgc.authentication.controller;
 
-import org.hgc.authentication.pojo.Source;
+import org.hgc.authentication.model.Source;
 import org.hgc.authentication.service.SourceService;
-import org.hgc.authentication.utils.ResponseResult;
+import org.hgc.authentication.model.vo.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

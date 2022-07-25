@@ -1,6 +1,7 @@
 package org.hgc.authentication.config;
 
 import org.hgc.authentication.filter.JwtAuthenticationTokenFilter;
+import org.hgc.authentication.security.MyEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,20 +40,14 @@ public class SpringSecurityConfig {
                 .csrf().disable()
                 // 基于 token，不需要 session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                // 设置 jwtAuthError 处理认证失败、鉴权失败
-//                .exceptionHandling().authenticationEntryPoint(jwtAuthError).accessDeniedHandler(jwtAuthError).and()
-                // 下面开始设置权限
                 .authorizeRequests(authorize -> authorize
-                        // 请求放开
                         .antMatchers("/user/login").permitAll()
                         .antMatchers("/user/register").permitAll()
-                        // 其他地址的访问均需验证权限
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling().authenticationEntryPoint(new MyEntryPoint()).and()
                 // 添加 JWT 过滤器，JWT 过滤器在用户名密码认证过滤器之前
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                // 认证用户时用户信息加载配置，注入springAuthUserService
-//                .userDetailsService(xxxAuthUserService)
                 .build();
     }
 }

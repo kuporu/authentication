@@ -1,7 +1,7 @@
 package org.hgc.authentication;
 
 import org.hgc.authentication.mapper.UserMapper;
-import org.hgc.authentication.pojo.User;
+import org.hgc.authentication.model.User;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

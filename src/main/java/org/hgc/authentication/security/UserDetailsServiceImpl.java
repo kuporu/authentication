@@ -1,9 +1,9 @@
-package org.hgc.authentication.service.impl;
+package org.hgc.authentication.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.hgc.authentication.mapper.UserMapper;
-import org.hgc.authentication.pojo.LoginUser;
-import org.hgc.authentication.pojo.User;
+import org.hgc.authentication.security.LoginUserDetails;
+import org.hgc.authentication.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // 3. 把对应的用户信息封装成 UserDetails 对象并返回
         if (user != null) {
-            return new LoginUser(user);
+            return new LoginUserDetails(user);
         }
 
         throw new UsernameNotFoundException("没有找到该用户");

@@ -1,15 +1,16 @@
-package org.hgc.authentication.pojo;
+package org.hgc.authentication.security;
 
+import org.hgc.authentication.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class LoginUser implements UserDetails {
+public class LoginUserDetails implements UserDetails {
 
     private final User user;
 
-    public LoginUser (User user) {
+    public LoginUserDetails(User user) {
         this.user = user;
     }
 

@@ -1,12 +1,12 @@
 spring:
   application:
-    name: login																			# 关联Data ID中的${spring.application.name}
+    name: login												# 关联Data ID中的${spring.application.name}
   profiles:
-    active: ${LOGIN_PROFILE:pro}																						# profile粒度配置，dev/test/pro
+    active: ${LOGIN_PROFILE:dev}																						# profile粒度配置，dev/test/pro
   cloud:
     nacos:
       config:
-        server-addr: 121.4.79.150:8848												# nacos服务端host.port
-        file-extension: yaml															# 关联Data ID中的${file-extension:properties}
+        server-addr: 121.4.79.150:8848						# nacos服务端host.port
+        file-extension: yaml								# 关联Data ID中的${file-extension:properties}
         namespace: 901bf1c1-ced4-4cb8-85ef-a22545cdd39e		# 命名空间
-        group: LOGIN_GROUP														# 分组
+        group: LOGIN_GROUP									# 分组

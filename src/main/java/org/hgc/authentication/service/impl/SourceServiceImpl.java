@@ -1,10 +1,12 @@
 package org.hgc.authentication.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.hgc.authentication.enums.ResultCode;
 import org.hgc.authentication.mapper.SourceMapper;
-import org.hgc.authentication.pojo.Source;
+import org.hgc.authentication.model.Source;
+import org.hgc.authentication.model.error.APIException;
 import org.hgc.authentication.service.SourceService;
-import org.hgc.authentication.utils.ResponseResult;
+import org.hgc.authentication.model.vo.ResponseResult;
 import org.hgc.authentication.utils.UserContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +28,10 @@ public class SourceServiceImpl implements SourceService {
 
         // 如果查询结果为空，表示之前未登录
         if (Objects.isNull(source)) {
-            return new ResponseResult(222, "用户之前未登录");
+//            return new ResponseResult(222, "用户之前未登录");
+            throw new APIException("用户之前未登录");
         } else {
-            return ResponseResult.success(source.getWeatherId());
+            return new ResponseResult(source.getWeatherId());
         }
     }
 
@@ -46,6 +49,6 @@ public class SourceServiceImpl implements SourceService {
 
         source.setUserId(currentUserId);
         sourceMapper.insert(source);
-        return ResponseResult.success("添加记录成功");
+        return new ResponseResult("添加记录成功");
     }
 }

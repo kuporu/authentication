@@ -1,7 +1,9 @@
 package org.hgc.authentication.filter;
 
 import io.jsonwebtoken.Claims;
-import org.hgc.authentication.pojo.LoginUser;
+import org.hgc.authentication.enums.ResultCode;
+import org.hgc.authentication.model.error.APIException;
+import org.hgc.authentication.security.LoginUserDetails;
 import org.hgc.authentication.utils.JwtUtil;
 import org.hgc.authentication.utils.RedisCache;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,12 +42,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             Claims claims = JwtUtil.parseJWT(token);
             userId = claims.getSubject();
         } catch (Exception e) {
-            throw new RuntimeException("token非法");
+            // 登录错误统一由Spring Security ExceptionTranslationFilter 捕获并处理
+            filterChain.doFilter(request, response);
+            return;
         }
         String redisKey = "login:" + userId;
-        LoginUser loginUser = redisCache.getCacheObject(redisKey);
+        LoginUserDetails loginUser = redisCache.getCacheObject(redisKey);
         if (Objects.isNull(loginUser)) {
-            throw new RuntimeException("用户未登录");
+            filterChain.doFilter(request, response);
+            return;
         }
 
         // 3. 将Authentication存入SecurityContextHolder

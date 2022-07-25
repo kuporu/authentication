@@ -25,7 +25,7 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<T>
 
     static
     {
-        ParserConfig.getGlobalInstance().addAccept("org.hgc.authentication.pojo.");
+        ParserConfig.getGlobalInstance().addAccept("org.hgc.authentication.security.");
     }
 
     public FastJsonRedisSerializer(Class<T> clazz)

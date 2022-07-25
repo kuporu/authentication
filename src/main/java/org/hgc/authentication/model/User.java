@@ -1,4 +1,4 @@
-package org.hgc.authentication.pojo;
+package org.hgc.authentication.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
