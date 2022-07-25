@@ -6,6 +6,7 @@ import org.hgc.authentication.model.vo.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
@@ -25,7 +26,7 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public ResponseResult register (@RequestBody User user) {
+    public ResponseResult register (@RequestBody @Valid User user) {
         return loginServer.register(user);
     }
 
