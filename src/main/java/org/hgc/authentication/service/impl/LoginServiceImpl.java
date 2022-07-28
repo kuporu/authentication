@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.hgc.authentication.enums.ResultCode;
 import org.hgc.authentication.mapper.UserMapper;
 import org.hgc.authentication.model.error.APIException;
+import org.hgc.authentication.model.param.UserParam;
 import org.hgc.authentication.security.LoginUserDetails;
 import org.hgc.authentication.model.User;
 import org.hgc.authentication.service.LoginServer;
@@ -38,10 +39,10 @@ public class LoginServiceImpl implements LoginServer {
     private RedisCache redisCache;
 
     @Override
-    public ResponseResult login(User user) {
+    public ResponseResult<Map<String, String>> login(UserParam userParam) {
 
         // 1. 用户认证
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getName(),user.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userParam.getName(),userParam.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         if (Objects.isNull(authenticate)) {
 //            return ResponseResult.error(201, "用户名或密码错误");
@@ -57,11 +58,11 @@ public class LoginServiceImpl implements LoginServer {
 
         // 3. 保存用户详细信息到Redis中
         redisCache.setCacheObject("login:" + userId, loginUser);
-        return new ResponseResult(map);
+        return new ResponseResult<>(map);
     }
 
     @Override
-    public ResponseResult logout() {
+    public ResponseResult<String> logout() {
 
         // 1. 从 SecurityContextHolder中获取用户id
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -72,24 +73,24 @@ public class LoginServiceImpl implements LoginServer {
         String redisKey = "login:" + userId;
         redisCache.deleteObject(redisKey);
 
-        return new ResponseResult("退出成功");
+        return new ResponseResult<>("退出成功");
     }
 
     @Override
-    public ResponseResult register(User user) {
+    public ResponseResult<String> register(UserParam userParam) {
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(User::getName, user.getName());
+        lambdaQueryWrapper.eq(User::getName, userParam.getName());
         User selectOne = userMapper.selectOne(lambdaQueryWrapper);
         if (!Objects.isNull(selectOne)) {
-//            return ResponseResult.error(202, "用户已存在");
             throw new APIException("用户已存在");
         } else {
-
-            String password = user.getPassword();
+            String password = userParam.getPassword();
             String encode = passwordEncoder.encode(password); // 往数据库中添加密码的时候就需要加密
+            User user = new User();
+            user.setName(userParam.getName());
             user.setPassword(encode);
             userMapper.insert(user);
-            return new ResponseResult("添加用户成功");
+            return new ResponseResult<>("添加用户成功");
         }
     }
 }

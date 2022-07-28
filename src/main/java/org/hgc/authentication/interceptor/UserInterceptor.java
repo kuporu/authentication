@@ -18,6 +18,9 @@ public class UserInterceptor implements HandlerInterceptor {
         if ("/user/register".equals(request.getRequestURI())) {
             return true;
         }
+        if (request.getRequestURI().startsWith("/doc/")) {
+            return true;
+        }
         String token = request.getHeader("token");
         if (token == null || token.isEmpty()) {
             return false;

@@ -1,0 +1,18 @@
+{
+  "serverUrl": "http://1.117.219.117:8091",
+  "outPath": "./src/main/resources/static/doc",
+  "allInOne": true,
+  "requestHeaders": [
+    {
+      "name": "token",
+      "type": "string",
+      "desc": "JWT凭证",
+      "value": "JWT",
+      "required": true,
+      "since": "-",
+      "pathPatterns": "/user/logout,/source/**",
+      "excludePathPatterns": "/user/login,/user/register"
+    }
+  ],
+  "createDebugPage": true
+}

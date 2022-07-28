@@ -5,6 +5,7 @@ import org.hgc.authentication.enums.ResultCode;
 import org.hgc.authentication.mapper.SourceMapper;
 import org.hgc.authentication.model.Source;
 import org.hgc.authentication.model.error.APIException;
+import org.hgc.authentication.model.param.SourceParam;
 import org.hgc.authentication.service.SourceService;
 import org.hgc.authentication.model.vo.ResponseResult;
 import org.hgc.authentication.utils.UserContext;
@@ -21,7 +22,7 @@ public class SourceServiceImpl implements SourceService {
     private SourceMapper sourceMapper;
 
     @Override
-    public ResponseResult getWeatherId() {
+    public ResponseResult<String> getWeatherId() {
         LambdaQueryWrapper<Source> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Source::getUserId, UserContext.getCurrentUserId());
         Source source = sourceMapper.selectOne(queryWrapper);
@@ -31,13 +32,13 @@ public class SourceServiceImpl implements SourceService {
 //            return new ResponseResult(222, "用户之前未登录");
             throw new APIException("用户之前未登录");
         } else {
-            return new ResponseResult(source.getWeatherId());
+            return new ResponseResult<>(source.getWeatherId());
         }
     }
 
     @Override
     @Transactional
-    public ResponseResult setWeatherId(Source source) {
+    public ResponseResult<String> setWeatherId(SourceParam sourceParam) {
         long currentUserId = UserContext.getCurrentUserId();
         LambdaQueryWrapper<Source> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Source::getUserId, currentUserId);
@@ -46,9 +47,10 @@ public class SourceServiceImpl implements SourceService {
         if (!Objects.isNull(selectOne)) {
             sourceMapper.deleteById(selectOne.getId());
         }
-
+        Source source = new Source();
         source.setUserId(currentUserId);
+        source.setWeatherId(sourceParam.getWeatherId());
         sourceMapper.insert(source);
-        return new ResponseResult("添加记录成功");
+        return new ResponseResult<>("添加记录成功");
     }
 }

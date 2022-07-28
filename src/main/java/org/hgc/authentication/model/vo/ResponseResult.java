@@ -7,10 +7,12 @@ import org.hgc.authentication.enums.ResultCode;
 public class ResponseResult<T> {
     /**
      * 状态码
+     * @mock 1001
      */
     private final int code;
     /**
      * 响应信息
+     * @mock 操作成功
      */
     private final String msg;
     /**

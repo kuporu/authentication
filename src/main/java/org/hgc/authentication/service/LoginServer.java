@@ -1,12 +1,15 @@
 package org.hgc.authentication.service;
 
 import org.hgc.authentication.model.User;
+import org.hgc.authentication.model.param.UserParam;
 import org.hgc.authentication.model.vo.ResponseResult;
 
+import java.util.Map;
+
 public interface LoginServer {
-    ResponseResult login(User user);
+    ResponseResult<Map<String, String>> login(UserParam userParam);
 
-    ResponseResult logout();
+    ResponseResult<String> logout();
 
-    ResponseResult register(User user);
+    ResponseResult<String> register(UserParam user);
 }
